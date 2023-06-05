@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include "task1.h"
+#include "task2.h"
 #include "client.h"
 #include "authform.h"
 #include "functionsforclient.h"
@@ -49,5 +50,6 @@ private:
     Ui::MainWindow *ui;
     AuthForm *ui_auth;
     task1 *ui_task1;
+    task2 *ui_task2;
 };
 #endif // MAINWINDOW_H

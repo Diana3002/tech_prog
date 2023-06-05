@@ -33,7 +33,7 @@ protected:
     Db()
     {
         db = QSqlDatabase::addDatabase("QSQLITE");
-        db.setDatabaseName("C:\\Users\\Parinova Diana\\Desktop\\prog\\ProgProject-main\\DataBase.db");
+        db.setDatabaseName("/home/kirillosin/Desktop/tech_prog-task_Parinova/ProgProject-main/DataBase.db");
 
 
         if(!db.open())
@@ -119,21 +119,39 @@ public:
                 query.bindValue(":login", log);
                 query.exec();
                 query.clear();
-                qDebug() << "Good";
                 return "check_true";
             }
             else
             {
                 QSqlQuery query;
-                qDebug() << "IT`S HERE";
                 query.prepare("UPDATE user SET stat=-1 WHERE log=:log;");
                 query.bindValue(":log", log);
                 query.exec();
                 query.clear();
-                return "check_true";
+                return "check_false";
             }
         }
-
+        else if (numb == "2")
+        {
+            if (ans=="true")
+            {
+                QSqlQuery query;
+                query.prepare("UPDATE user SET stat1=1 WHERE log=:login;");
+                query.bindValue(":login", log);
+                query.exec();
+                query.clear();
+                return "check_true";
+            }
+            else
+            {
+                QSqlQuery query;
+                query.prepare("UPDATE user SET stat1=-1 WHERE log=:log;");
+                query.bindValue(":log", log);
+                query.exec();
+                query.clear();
+                return "check_false";
+            }
+        }
     }
     QByteArray auth(QString log, QString pass,int desc) {
 

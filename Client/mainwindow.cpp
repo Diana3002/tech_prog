@@ -2,12 +2,14 @@
 #include "ui_mainwindow.h"
 #include "client.h"
 #include "ui_task1.h"
+#include "ui_task2.h"
 #include "Random.hpp"
 MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
     ui_auth = new AuthForm;
     ui_task1 = new task1;
+    ui_task2 = new task2;
     QObject::connect(ui_auth, &AuthForm::onClosed, this, &MainWindow::slot_show);
     ui_auth->show();
 }
@@ -60,8 +62,11 @@ void MainWindow::on_but_task1_clicked()
 
 void MainWindow::on_but_task2_clicked()
 {
-
-
+    //    auto vari = Random::get(1, 2);
+    auto vari = Random::get(1, 2);
+    ui_task2->setTaskNumber(2, ui->name_label->text(), vari);
+    ui_task2->generateTask(vari);
+    ui_task2->show();
 }
 
 void MainWindow::on_but_task3_clicked()

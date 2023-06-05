@@ -1,6 +1,6 @@
 #include "functioforserver.h"
 #include <QDebug>
-
+#include <QVector>
 
 
 QByteArray reg(QString log, QString pass,QString mail)
@@ -15,7 +15,38 @@ QByteArray auth(QString log, QString pass,int desc)
 }
 
 QByteArray check_ans(QString task_number,QString variant, QString ans, QString log){
-    return Db::getInstance()->check_ans(task_number, variant, ans, log);
+        bool res = false;
+        qDebug() << variant;
+        if (task_number == "1"){
+            if(variant=="1")
+            {
+                QVector<QVector<int>> var1 = {{1,1,0,0},{1,0,1,1},{0,0,0,1},{0,1,1,0}};
+                // добавить в .h var1 и var2
+                // разобраться с форматами
+                res = (ans==solver_task1(var1));
+            }
+            if(variant=="2"){
+                QVector<QVector<int>> var2 = {{1, 0, 0, 0, 1, 0, 1}, {1, 1, 1, 0, 0, 0, 0}, {0, 1, 0, 0, 0, 1, 0}, {0, 0, 0, 1, 1, 0, 0}, {0, 0, 1, 1, 0, 1, 1}};
+                res = (ans == solver_task1(var2));
+            }
+        }
+        else if (task_number == "2"){
+            if (variant=="1"){
+                QVector<QVector<int>> var1 = {{1, 2}, {1, 3}, {2, 3}};
+                res = (ans == solver_task2(var1, var1.size(), 3));
+            }
+            if (variant=="2"){
+                QVector<QVector<int>> var2 = {{1, 2}, {1, 3}, {1, 5}, {1, 6}, {2, 3}, {2, 4}, {2, 6}, {3, 4}, {3, 5}, {3, 7}, {3, 8}, {6, 7}, {6, 8}};
+                res = (ans == solver_task2(var2, var2.size(), 8));
+
+            }
+        }
+    if(res){
+            ans = "true";
+            qDebug() << "Everyrhing is ok!";
+        }
+        else {ans = "false";}
+        return Db::getInstance()->check_ans(task_number, variant, ans, log);
 }
 
 QByteArray count_stat(QString log){
@@ -107,4 +138,84 @@ QByteArray parsing (QString data_from_client,int desc)
     {
         return data_from_client.toUtf8();;
     }
+}
+
+QString solver_task1(QVector<QVector<int>> G){
+    size_t vxs = G[0].size(); // Количество столбцов
+
+    // Здесь по-хорошему нужно убедиться, что
+    // в каждой строке одно и то же число столбцов
+
+    QVector<QVector<int>> R(vxs, QVector<int>(vxs,0)); // Результат
+
+    // Проход по строкам
+    for(const auto& s: G)
+    {
+        QVector<size_t> ix; // Собираем ненулевые значения
+        for(size_t i = 0; i < s.size(); ++i)
+            if (s[i]) ix.push_back(i);
+        // Если их хотя бы 2...
+        if (ix.size() > 1)
+        {
+            // Каждый с каждым - расставляем единицы
+            for(size_t i = 0; i < ix.size()-1; ++i)
+                for(size_t j = i+1; j < ix.size(); ++j)
+                    R[ix[i]][ix[j]] = R[ix[j]][ix[i]] = 1;
+        }
+    }
+    QString result = "|";
+    for(size_t i = 0; i < R.size(); ++i)
+    {
+        QString row = "";
+        for(size_t j = 0; j < R[i].size(); ++j){
+            row.append(QString::number(R[i][j]));
+            row.append(" ");
+        }
+        row.resize(row.size() - 1);
+        row.append("|");
+        result.append(row);
+    }
+    qDebug() << result;
+    return result;
+}
+
+
+template <class T>
+void initMatrix(QVector<QVector<T> > &matrix, int nrow, int ncol, T value)
+{
+    matrix.resize(nrow);
+    for(int i = 0; i != nrow; ++i)
+        matrix[i].resize(ncol);
+
+    for(int i = 0; i != nrow; ++i)
+        for(int j = 0; j != ncol; ++j) matrix[i][j] = value;
+}
+
+QString solver_task2(QVector<QVector<int>> G, int count_reber, int count_vershin){
+    QVector<QVector<int>> result;
+    initMatrix(result, count_reber, count_vershin, 0);
+    qDebug() << result;
+    for (int i = 0; i < count_reber; i++){
+        for (int j = 0; j < count_vershin; j++){
+            if ((G[i][0] == j + 1) or (G[i][1] == j + 1)){
+                result[i][j] = 1;
+            }
+            else{
+                result[i][j] = 0;
+            }
+        }
+    }
+    QString result_in_form_string = "|";
+    for (int i = 0; i < result.size();i++){
+        for (int j = 0; j < result[i].size();j++){
+            result_in_form_string.append(QString::number(result[i][j]));
+            result_in_form_string.append(", ");
+
+        }
+
+        result_in_form_string.resize(result_in_form_string.size() - 2);
+        result_in_form_string.append("|");
+    }
+    qDebug() << result_in_form_string;
+    return result_in_form_string;
 }

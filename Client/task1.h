@@ -19,7 +19,6 @@ public:
     ~task1();
     void setTaskNumber(int n, QString _log, int vari);
     void generateTask(int n);
-    QString solve(int n, QVector<QVector<int>> G);
 
 
 private slots:

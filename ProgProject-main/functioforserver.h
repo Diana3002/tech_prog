@@ -11,5 +11,6 @@ QByteArray parsing (QString data_from_client, int desc);
 
 QByteArray auth(QString log, QString pass);
 QByteArray reg(QString log, QString pass);
-
+QString solver_task1(QVector<QVector<int>> G);
+QString solver_task2(QVector<QVector<int>> G, int count_reber, int count_vershin);
 #endif // FUNCTIOFORSERVER_H

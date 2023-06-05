@@ -14,7 +14,8 @@ SOURCES += \
     functionsforclient.cpp \
     main.cpp \
     mainwindow.cpp \
-    task1.cpp
+    task1.cpp \
+    task2.cpp
 
 
 
@@ -24,13 +25,15 @@ HEADERS += \
     client.h \
     functionsforclient.h \
     mainwindow.h \
-    task1.h
+    task1.h \
+    task2.h
 
 
 FORMS += \
     authform.ui \
     mainwindow.ui \
-    task1.ui
+    task1.ui \
+    task2.ui
 
 
 
