@@ -1,0 +1,77 @@
+\doxysection{Random.\+hpp}
+\hypertarget{_random_8hpp_source}{}\label{_random_8hpp_source}\index{C:/Users/OlimPC/Desktop/12/2/Client/Random.hpp@{C:/Users/OlimPC/Desktop/12/2/Client/Random.hpp}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ RANDOM\_HPP}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ RANDOM\_HPP}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <random>}}
+\DoxyCodeLine{00005\ }
+\DoxyCodeLine{00006\ \textcolor{keyword}{namespace\ }details}
+\DoxyCodeLine{00007\ \{}
+\DoxyCodeLine{00009\ \textcolor{keyword}{template}<\textcolor{keyword}{class}\ T>}
+\DoxyCodeLine{00010\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structdetails_1_1is__uniform__int}{is\_uniform\_int}}\ \{}
+\DoxyCodeLine{00011\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ value\ =}
+\DoxyCodeLine{00012\ \ \ \ \ \ \ \ \ std::is\_same<T,\ \ \ \ \ \ \ \ \ \ \ \ \ \ short>::value\ ||}
+\DoxyCodeLine{00013\ \ \ \ \ \ \ \ \ std::is\_same<T,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ int>::value\ ||}
+\DoxyCodeLine{00014\ \ \ \ \ \ \ \ \ std::is\_same<T,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ long>::value\ ||}
+\DoxyCodeLine{00015\ \ \ \ \ \ \ \ \ std::is\_same<T,\ \ \ \ \ \ \ \ \ \ long\ long>::value\ ||}
+\DoxyCodeLine{00016\ \ \ \ \ \ \ \ \ std::is\_same<T,\ \ \ \ \ unsigned\ short>::value\ ||}
+\DoxyCodeLine{00017\ \ \ \ \ \ \ \ \ std::is\_same<T,\ \ \ \ \ \ \ unsigned\ int>::value\ ||}
+\DoxyCodeLine{00018\ \ \ \ \ \ \ \ \ std::is\_same<T,\ \ \ \ \ \ unsigned\ long>::value\ ||}
+\DoxyCodeLine{00019\ \ \ \ \ \ \ \ \ std::is\_same<T,\ unsigned\ long\ long>::value;}
+\DoxyCodeLine{00020\ \};}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00023\ \textcolor{keyword}{template}<\textcolor{keyword}{class}\ T>}
+\DoxyCodeLine{00024\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structdetails_1_1is__uniform__real}{is\_uniform\_real}}\ \{}
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{bool}\ value\ =}
+\DoxyCodeLine{00026\ \ \ \ \ \ \ \ \ std::is\_same<T,\ \ \ \ \ \ \ float>::value\ ||}
+\DoxyCodeLine{00027\ \ \ \ \ \ \ \ \ std::is\_same<T,\ \ \ \ \ \ double>::value\ ||}
+\DoxyCodeLine{00028\ \ \ \ \ \ \ \ \ std::is\_same<T,\ long\ double>::value;}
+\DoxyCodeLine{00029\ \};}
+\DoxyCodeLine{00030\ \}}
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00032\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_random}{Random}}}
+\DoxyCodeLine{00033\ \{}
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{class}\ T>\ \textcolor{keyword}{using\ }IntDist\ =\ std::uniform\_int\_distribution<T>;}
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{class}\ T>\ \textcolor{keyword}{using\ }RealDist\ =\ std::uniform\_real\_distribution<T>;}
+\DoxyCodeLine{00036\ }
+\DoxyCodeLine{00037\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{class}\ T>}
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{typename}\ std::enable\_if<details::is\_uniform\_int<T>::value,\ T>::type\ get(T\ from\ =\ std::numeric\_limits<T>::min(),\ T\ to\ =\ std::numeric\_limits<T>::max())}
+\DoxyCodeLine{00040\ \ \ \ \ \{}
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (from\ >\ to)\ std::swap(from,\ to);}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ IntDist<T>\ dist\{from,\ to\};}
+\DoxyCodeLine{00043\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ dist(instance().engine());}
+\DoxyCodeLine{00044\ \ \ \ \ \}}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{keyword}{template}\ <\textcolor{keyword}{class}\ T>}
+\DoxyCodeLine{00047\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{typename}\ std::enable\_if<details::is\_uniform\_real<T>::value,\ T>::type\ get(T\ from\ =\ std::numeric\_limits<T>::min(),\ T\ to\ =\ std::numeric\_limits<T>::max())}
+\DoxyCodeLine{00048\ \ \ \ \ \{}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (from\ >\ to)\ std::swap(from,\ to);}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ RealDist<T>\ dist\{from,\ to\};}
+\DoxyCodeLine{00051\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ dist(instance().engine());}
+\DoxyCodeLine{00052\ \ \ \ \ \}}
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00054\ \ \ \ \ std::mt19937\&\ engine()\ \{\ \textcolor{keywordflow}{return}\ m\_mt;\ \}}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00056\ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00057\ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{class_random}{Random}}\&\ instance()}
+\DoxyCodeLine{00058\ \ \ \ \ \{}
+\DoxyCodeLine{00059\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{class_random}{Random}}\ inst;}
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ inst;}
+\DoxyCodeLine{00061\ \ \ \ \ \}}
+\DoxyCodeLine{00062\ }
+\DoxyCodeLine{00063\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00064\ \ \ \ \ std::random\_device\ m\_rd;\ \textcolor{comment}{//\ Random\ Number\ Generator}}
+\DoxyCodeLine{00065\ \ \ \ \ std::mt19937\ m\_mt;\ \ \ \ \ \ \ \textcolor{comment}{//\ Standard\ random\ number\ generator}}
+\DoxyCodeLine{00066\ }
+\DoxyCodeLine{00067\ \ \ \ \ \mbox{\hyperlink{class_random}{Random}}()\ :\ m\_mt(m\_rd())\ \{\}}
+\DoxyCodeLine{00068\ \ \ \ \ \mbox{\hyperlink{class_random}{\string~Random}}()\ \{\}}
+\DoxyCodeLine{00069\ \ \ \ \ \mbox{\hyperlink{class_random}{Random}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{class_random}{Random}}\&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00070\ \ \ \ \ \mbox{\hyperlink{class_random}{Random}}\&\ operator\ =\ (\textcolor{keyword}{const}\ \mbox{\hyperlink{class_random}{Random}}\&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00071\ \};}
+\DoxyCodeLine{00072\ }
+\DoxyCodeLine{00073\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{//\ RANDOM\_HPP}}
+
+\end{DoxyCode}
